@@ -2,7 +2,7 @@ import { Menu } from 'lucide-react';
 import { motion } from 'motion/react';
 
 interface NavbarProps {
-  onBegin: (tab: 'portfolio' | 'customPricing' | 'photoEdits' | 'designWork' | 'about') => void;
+  onBegin: (tab: 'portfolio' | 'customPricing' | 'photoEdits' | 'moreEdits' | 'designWork' | 'about') => void;
 }
 
 export default function Navbar({ onBegin }: NavbarProps) {

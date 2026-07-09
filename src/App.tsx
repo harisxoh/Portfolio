@@ -6,7 +6,7 @@ import Hero from './components/Hero';
 import BottomNav from './components/BottomNav';
 import BackgroundMedia from './components/BackgroundMedia';
 
-type Tab = 'portfolio' | 'customPricing' | 'photoEdits' | 'designWork' | 'about';
+type Tab = 'portfolio' | 'customPricing' | 'photoEdits' | 'moreEdits' | 'designWork' | 'about';
 
 /** Images in public/images — order is preserved in the Photo Edits gallery. */
 const PHOTO_EDIT_FILES = [
@@ -52,6 +52,29 @@ const DESIGN_WORK_FILES = [
   'TshirtDesign.jpeg',
 ] as const;
 
+const MORE_EDIT_FILES = [
+  '0f4d6feb-584d-4056-85c0-e50146ba05bc.jpeg',
+  '1 (1).png',
+  '31da10a6-aff9-447f-b12a-a3af96b75211.jpeg',
+  '6802513b-278d-419c-aca6-42b47f9e3222.jpeg',
+  '8d9e8f95-ff22-41f1-8ce7-ac5f17c693eb.jpg',
+  '8q631cuib27h1.jpg',
+  'a60b1564-39f3-4e20-a7ff-13e4fb00e6a2 (1).png',
+  'a814ccc8-ae7b-44a1-bcef-ace09162a413.png',
+  'b9975e70-ac9a-4210-97ae-fd9e254ddaec.jpeg',
+  'bd24a0cp1ed8h1.jpg',
+  'Beige Minimalist Before After Hair Salon Instagram Post (4).png',
+  'Beige Minimalist Before After Hair Salon Instagram Post.png',
+  'catedited11.jpg',
+  'edited fixx.jpg',
+  'fixed1.jpg',
+  'fixededit (1).jpg',
+  'hairedt11.png',
+  'IMG_6500~6 (1) (2).jpg',
+  'oldimage.jpg',
+  'Remove background project - 04 June 2026 at 10.40.08.png',
+] as const;
+
 function titleFromImageFile(filename: string): string {
   const base = filename.replace(/\.[^.]+$/, '');
   const spaced = base
@@ -67,6 +90,7 @@ function titleFromImageFile(filename: string): string {
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>('portfolio');
+  const [hiddenFiles, setHiddenFiles] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
@@ -100,6 +124,8 @@ export default function App() {
               {[
                 { tier: 'Basic edits', price: '$5 - $10', note: 'Quick touch-ups, small corrections, and clean enhancements.' },
                 { tier: 'Headshots / detailed edits', price: '$10 - $20', note: 'Natural retouching, detail work, and professional profile polishing.' },
+                { tier: 'Express delivery', price: '$15 - $25', note: 'Fast turnaround for urgent edits with priority scheduling.' },
+                { tier: 'Batch edits', price: '$12 - $18 per image', note: 'Consistent styling and cleanup for multiple images in one project.' },
                 { tier: 'Complex edits', price: '$20+', note: 'Advanced composites, object/person changes, and high-complexity requests.' },
                 { tier: 'Logo/UI design', price: '$25 - $60+', note: 'Branding and interface design, priced by scope and revision needs.' },
               ].map((item, idx) => (
@@ -226,6 +252,52 @@ export default function App() {
                   </div>
                 </div>
               </div>
+            </div>
+          </motion.div>
+        );
+      case 'moreEdits':
+        return (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="relative z-10 pt-32 pb-32 px-6 max-w-6xl mx-auto"
+          >
+            <div className="text-center mb-16">
+              <h2 className="font-headline text-5xl md:text-6xl mb-4 italic">More Edits</h2>
+              <p className="text-on-surface-variant/80 max-w-2xl mx-auto">Additional creative enhancements for portraits, products, and social content that need a polished, premium finish.</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {MORE_EDIT_FILES.filter((file) => !hiddenFiles.has(file)).map((file, idx) => {
+                const title = titleFromImageFile(file);
+                return (
+                  <motion.div
+                    key={file}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: Math.min(idx * 0.03, 0.3) }}
+                    className="group relative liquid-glass rounded-2xl overflow-hidden border border-white/5"
+                  >
+                    <div className="relative flex items-center justify-center bg-black/10 px-3 py-4 sm:px-4 sm:py-5">
+                      <img
+                        src={`/images/more%20images/${encodeURIComponent(file)}`}
+                        alt={title}
+                        className="block h-auto max-h-[min(70vh,420px)] w-auto max-w-full object-contain object-center"
+                        loading="lazy"
+                        onError={() => setHiddenFiles((set) => new Set(set).add(file))}
+                      />
+                    </div>
+                    <div className="p-6">
+                      <h3 className="text-xl font-headline italic mb-1">{title}</h3>
+                      <p className="text-[10px] uppercase tracking-widest text-on-surface-variant/50 font-mono">
+                        {file}
+                      </p>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
           </motion.div>
         );

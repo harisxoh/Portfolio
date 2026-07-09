@@ -382,8 +382,8 @@ export default function App() {
             className="relative z-10 pt-32 pb-32 px-6 max-w-4xl mx-auto"
           >
             <div className="flex flex-col items-center text-center">
-              <div className="w-32 h-32 rounded-full border-2 border-tertiary p-1 mb-8">
-                <img src="https://picsum.photos/seed/profile/400/400" alt="Profile" className="w-full h-full rounded-full object-cover grayscale" />
+              <div className="w-32 h-32 rounded-full border-2 border-tertiary p-1 mb-8 overflow-hidden">
+                <img src="/img/b8305480-a0a1-4739-890e-b20d5afb9f75.jpeg" alt="Profile" className="w-full h-full rounded-full object-cover object-center grayscale" />
               </div>
               <h2 className="font-headline text-5xl mb-6 italic">The Visionary Behind the Lens</h2>
               <p className="text-on-surface-variant/80 leading-relaxed mb-12">

@@ -88,6 +88,10 @@ function titleFromImageFile(filename: string): string {
     .join(' ');
 }
 
+function webpPath(src: string): string {
+  return src.replace(/\.(png|jpe?g)$/i, '.webp');
+}
+
 export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>('portfolio');
   const [hiddenFiles, setHiddenFiles] = useState<Set<string>>(new Set());
@@ -180,6 +184,7 @@ export default function App() {
                         alt={title}
                         className="block h-auto max-h-[min(70vh,560px)] w-auto max-w-full object-contain object-center"
                         loading="lazy"
+                        decoding="async"
                       />
                       <div className="pointer-events-none absolute top-4 left-4 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full text-[10px] uppercase tracking-widest max-w-[calc(100%-2rem)] truncate">
                         {file.replace(/\.[^.]+$/, '')}
@@ -281,13 +286,17 @@ export default function App() {
                     className="group relative liquid-glass rounded-2xl overflow-hidden border border-white/5"
                   >
                     <div className="relative flex items-center justify-center bg-black/10 px-3 py-4 sm:px-4 sm:py-5">
-                      <img
-                        src={`/images/more%20images/${encodeURIComponent(file)}`}
-                        alt={title}
-                        className="block h-auto max-h-[min(70vh,420px)] w-auto max-w-full object-contain object-center"
-                        loading="lazy"
-                        onError={() => setHiddenFiles((set) => new Set(set).add(file))}
-                      />
+                      <picture>
+                        <source srcSet={webpPath(`/images/more%20images/${encodeURIComponent(file)}`)} type="image/webp" />
+                        <img
+                          src={`/images/more%20images/${encodeURIComponent(file)}`}
+                          alt={title}
+                          className="block h-auto max-h-[min(70vh,420px)] w-auto max-w-full object-contain object-center"
+                          loading="lazy"
+                          decoding="async"
+                          onError={() => setHiddenFiles((set) => new Set(set).add(file))}
+                        />
+                      </picture>
                     </div>
                     <div className="p-6">
                       <h3 className="text-xl font-headline italic mb-1">{title}</h3>
@@ -332,6 +341,7 @@ export default function App() {
                         alt={title}
                         className="block h-auto max-h-[min(70vh,560px)] w-auto max-w-full object-contain object-center"
                         loading="lazy"
+                        decoding="async"
                       />
                       <div className="pointer-events-none absolute top-4 left-4 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full text-[10px] uppercase tracking-widest max-w-[calc(100%-2rem)] truncate">
                         {file.replace(/\.[^.]+$/, '')}
@@ -383,7 +393,18 @@ export default function App() {
           >
             <div className="flex flex-col items-center text-center">
               <div className="w-32 h-32 rounded-full border-2 border-tertiary p-1 mb-8 overflow-hidden">
-                <img src="/img/b8305480-a0a1-4739-890e-b20d5afb9f75.jpeg" alt="Profile" className="w-full h-full rounded-full object-cover object-center grayscale" />
+                <picture>
+                  <source srcSet={webpPath('/img/b8305480-a0a1-4739-890e-b20d5afb9f75.jpeg')} type="image/webp" />
+                  <img
+                    src="/img/b8305480-a0a1-4739-890e-b20d5afb9f75.jpeg"
+                    alt="Profile"
+                    width="128"
+                    height="128"
+                    className="w-full h-full rounded-full object-cover object-center grayscale"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
               </div>
               <h2 className="font-headline text-5xl mb-6 italic">The Visionary Behind the Lens</h2>
               <p className="text-on-surface-variant/80 leading-relaxed mb-12">

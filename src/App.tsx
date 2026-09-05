@@ -55,7 +55,6 @@ const DESIGN_WORK_FILES = [
 const MORE_EDIT_FILES = [
   '0f4d6feb-584d-4056-85c0-e50146ba05bc.jpeg',
   '1 (1).png',
-  '31da10a6-aff9-447f-b12a-a3af96b75211.jpeg',
   '6802513b-278d-419c-aca6-42b47f9e3222.jpeg',
   '8d9e8f95-ff22-41f1-8ce7-ac5f17c693eb.jpg',
   '8q631cuib27h1.jpg',
@@ -74,6 +73,50 @@ const MORE_EDIT_FILES = [
   'oldimage.jpg',
   'Remove background project - 04 June 2026 at 10.40.08.png',
 ] as const;
+
+const AMORE_EDIT_FILES = [
+  '06c92a81-0f80-451e-8df7-55c89a5c1a81.png',
+  '07e161e0-b0e0-498a-b536-1da4ee1678bb.png',
+  '097ed45b70a443b1b8661ab252581dd5.jpeg',
+  '0b3b0825497e1d8884b5cb9a0d5d866c.jpg',
+  '0f4d6feb-584d-4056-85c0-e50146ba05bc (1).jpeg',
+  '1aba98bc-fc32-4b03-9af0-2aba988f9642.png',
+  '1ed0a11c-702a-4b52-964a-94eaa1b82c51.png',
+  '28167d1c-6f1d-4a28-a9d2-e63102781ff9.jpeg',
+  '2d9bc8af4de43d2a196011c1487ed1f8.png',
+  '2nd.jpeg',
+  '3443be0b2eba4005bcd824d55b0350ed.png',
+  '3rd1.jpg',
+  '5341e7c5-1f61-43a7-826e-15f87afc94ce.png',
+  '5b50034d-b676-4f19-94ec-2ee8ea9e79bd.png',
+  '5fc7ae8c0f95403ba40c1fcda3f03959.jpeg',
+  '5jzxqn96f9wg1.jpg',
+  '61654d83-4637-498d-8039-d9c9c45434da.jpg',
+  '6802513b-278d-419c-aca6-42b47f9e3222 (1).jpeg',
+  '6eeb491611bfc2e63bdab7c5143b03ae.jpg',
+  '73cc8a1d-2ccc-49ad-ab40-3fc5a6b1c15b.png',
+  '76953af9-15e9-4849-bba4-da4ce6bf62bb.png',
+  '786fce8d9a00a2977cbf7fc354f7bde9.png',
+  '79c5e658-dfe9-4129-bc7b-b77d0553c6bf.png',
+  '7c25a4eff8d5280d3a0b0cea2dd0545a.jpg',
+  '865bf4cfad074588b63ab15e63b6211b.jpeg',
+  '86995ca6-2f90-41c6-b4f2-0b1084853f7f (1).jpeg',
+  '882aef6d-0e28-41bf-8b83-8cab58dc271b.jpg',
+  '8d549cfcbb167d7747095aeffc5df29f.jpg',
+  '9cc51698-4cbc-488c-99a4-f41f24bd85a1.png',
+  'a3b1462a-45ba-40af-aad1-6778feb36b36 (1).jpeg',
+  'c3b48c36-5f4a-4789-bb53-f0a59b00d155.png',
+  'd2cfcfa6-1429-4067-a50e-d43eeb33041d (1).jpeg',
+  'd9mbdw4hmkxg1.png',
+  'Design25.png',
+  'HouseColorDesign.png',
+  'weq8wu5rzyug1.jpg',
+] as const;
+
+const MORE_EDIT_ITEMS = [
+  ...MORE_EDIT_FILES.map((file) => ({ file, folder: 'more images' })),
+  ...AMORE_EDIT_FILES.map((file) => ({ file, folder: 'amore' })),
+];
 
 function titleFromImageFile(filename: string): string {
   const base = filename.replace(/\.[^.]+$/, '');
@@ -274,11 +317,13 @@ export default function App() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {MORE_EDIT_FILES.filter((file) => !hiddenFiles.has(file)).map((file, idx) => {
+              {MORE_EDIT_ITEMS.filter(({ file, folder }) => !hiddenFiles.has(`${folder}/${file}`)).map(({ file, folder }, idx) => {
                 const title = titleFromImageFile(file);
+                const imagePath = `/images/${encodeURIComponent(folder)}/${encodeURIComponent(file)}`;
+                const imageKey = `${folder}/${file}`;
                 return (
                   <motion.div
-                    key={file}
+                    key={imageKey}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -286,17 +331,14 @@ export default function App() {
                     className="group relative liquid-glass rounded-2xl overflow-hidden border border-white/5"
                   >
                     <div className="relative flex items-center justify-center bg-black/10 px-3 py-4 sm:px-4 sm:py-5">
-                      <picture>
-                        <source srcSet={webpPath(`/images/more%20images/${encodeURIComponent(file)}`)} type="image/webp" />
-                        <img
-                          src={`/images/more%20images/${encodeURIComponent(file)}`}
-                          alt={title}
-                          className="block h-auto max-h-[min(70vh,420px)] w-auto max-w-full object-contain object-center"
-                          loading="lazy"
-                          decoding="async"
-                          onError={() => setHiddenFiles((set) => new Set(set).add(file))}
-                        />
-                      </picture>
+                      <img
+                        src={imagePath}
+                        alt={title}
+                        className="block h-auto max-h-[min(70vh,420px)] w-auto max-w-full object-contain object-center"
+                        loading="lazy"
+                        decoding="async"
+                        onError={() => setHiddenFiles((set) => new Set(set).add(imageKey))}
+                      />
                     </div>
                     <div className="p-6">
                       <h3 className="text-xl font-headline italic mb-1">{title}</h3>
@@ -389,53 +431,64 @@ export default function App() {
             initial={{ opacity: 0, y: 20 }} 
             animate={{ opacity: 1, y: 0 }} 
             exit={{ opacity: 0, y: -20 }}
-            className="relative z-10 pt-32 pb-32 px-6 max-w-4xl mx-auto"
+            className="relative z-10 pt-40 pb-32 px-6 max-w-4xl mx-auto"
           >
             <div className="flex flex-col items-center text-center">
-              <div className="w-32 h-32 rounded-full border-2 border-tertiary p-1 mb-8 overflow-hidden">
-                <picture>
-                  <source srcSet={webpPath('/img/b8305480-a0a1-4739-890e-b20d5afb9f75.jpeg')} type="image/webp" />
-                  <img
-                    src="/img/b8305480-a0a1-4739-890e-b20d5afb9f75.jpeg"
-                    alt="Profile"
-                    width="128"
-                    height="128"
-                    className="w-full h-full rounded-full object-cover object-center grayscale"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </picture>
+              <span className="text-xs uppercase tracking-[0.3em] text-white/50 mb-6">About the artist</span>
+              <h2 
+                className="text-6xl md:text-7xl mb-8 tracking-tight text-white"
+                style={{ fontFamily: "'Instrument Serif', serif" }}
+              >
+                Crafting visual <em className="not-italic text-white/60">authenticity.</em>
+              </h2>
+              
+              <div className="space-y-6 max-w-2xl mx-auto mb-20">
+                <p className="text-white/80 leading-relaxed text-lg font-light">
+                  I am a dedicated image editor and designer working at the intersection of precision and natural beauty. My approach is rooted in the belief that the best edits are the ones you can't see.
+                </p>
+                <p className="text-white/60 leading-relaxed text-base font-light">
+                  Whether it's restoring a faded memory, removing distractions from a perfect shot, or designing clean, minimal branding, my goal is to enhance the essence of every visual I touch—ensuring the final result feels both professional and profoundly authentic.
+                </p>
               </div>
-              <h2 className="font-headline text-5xl mb-6 italic">The Visionary Behind the Lens</h2>
-              <p className="text-on-surface-variant/80 leading-relaxed mb-12">
-                I am a dedicated image editor and designer focused on the intersection of precision and natural beauty. My goal is to enhance the essence of every visual I touch, ensuring that the final result feels both professional and authentic.
-              </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mb-24">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full mb-24">
                 {[
-                  'Natural, realistic edits (not overdone)',
-                  'High attention to detail',
-                  'Preserves original textures & identity',
-                  'Clean, modern design style'
+                  'Subtle, realistic enhancements',
+                  'Meticulous attention to detail',
+                  'Preservation of original textures',
+                  'Modern, minimal design aesthetics'
                 ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3 p-4 liquid-glass rounded-xl text-left">
-                    <Check className="w-5 h-5 text-tertiary" />
-                    <span className="text-xs uppercase tracking-widest">{item}</span>
+                  <div key={i} className="flex items-center gap-4 p-5 liquid-glass rounded-2xl text-left border border-white/5">
+                    <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+                      <Check className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-sm font-medium tracking-wide text-white/90">{item}</span>
                   </div>
                 ))}
               </div>
 
               {/* CTA Section */}
-              <div className="w-full p-12 liquid-glass rounded-[3rem] border border-white/10 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-tertiary/10 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2" />
-                <h3 className="text-4xl md:text-5xl font-headline italic mb-8 relative z-10">Ready to upgrade your images?</h3>
-                <div className="flex flex-col md:flex-row gap-4 justify-center relative z-10">
-                  <button className="px-10 py-4 bg-white text-surface font-bold uppercase tracking-widest text-xs rounded-full hover:bg-tertiary transition-colors">
-                    Start a Project
+              <div className="w-full p-12 md:p-16 liquid-glass rounded-[2.5rem] border border-white/10 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
+                <h3 
+                  className="text-5xl md:text-6xl mb-8 relative z-10 text-white tracking-tight"
+                  style={{ fontFamily: "'Instrument Serif', serif" }}
+                >
+                  Let's create <em className="not-italic text-white/60">something.</em>
+                </h3>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center relative z-10">
+                  <button 
+                    onClick={() => setActiveTab('customPricing')}
+                    className="px-8 py-3.5 bg-white text-black font-semibold text-sm rounded-full hover:bg-white/90 transition-colors"
+                  >
+                    View Pricing
                   </button>
-                  <button className="px-10 py-4 liquid-glass border border-white/20 font-bold uppercase tracking-widest text-xs rounded-full hover:bg-white/10 transition-colors">
+                  <a 
+                    href="mailto:auxiyusufhasan@gmail.com"
+                    className="px-8 py-3.5 liquid-glass border border-white/20 text-white font-medium text-sm rounded-full hover:bg-white/10 transition-colors inline-flex items-center justify-center"
+                  >
                     Contact Me
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>

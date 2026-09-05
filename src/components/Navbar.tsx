@@ -1,54 +1,68 @@
-import { Menu } from 'lucide-react';
+import { Globe } from 'lucide-react';
 import { motion } from 'motion/react';
 
+type Tab =
+  | 'portfolio'
+  | 'customPricing'
+  | 'photoEdits'
+  | 'moreEdits'
+  | 'designWork'
+  | 'about';
+
 interface NavbarProps {
-  onBegin: (tab: 'portfolio' | 'customPricing' | 'photoEdits' | 'moreEdits' | 'designWork' | 'about') => void;
+  onBegin: (tab: Tab) => void;
 }
 
 export default function Navbar({ onBegin }: NavbarProps) {
   return (
-    <header className="fixed top-0 w-full z-50 bg-sky-950/70 backdrop-blur-xl flex justify-between items-center px-6 py-4 shadow-[0_40px_40px_-15px_rgba(0,16,27,0.06)]">
-      <div className="flex items-center gap-4">
-        <Menu className="w-6 h-6 text-slate-300 cursor-pointer hover:text-white transition-colors" />
-        <h1 className="font-headline text-2xl italic text-slate-100 tracking-tight select-none">Haris</h1>
-      </div>
-      
-      <nav className="hidden md:flex gap-8 items-center">
-        {[
-          { label: 'Portfolio', id: 'portfolio' },
-          { label: 'Pricing', id: 'customPricing' },
-          { label: 'Services', id: 'photoEdits' },
-          { label: 'About', id: 'about' }
-        ].map((item, idx) => (
-          <a
-            key={item.id}
-            href="#"
-            onClick={(e) => { e.preventDefault(); onBegin(item.id as any); }}
-            className={`font-sans uppercase tracking-[0.05em] text-xs font-bold px-3 py-1 transition-colors duration-300 rounded hover:bg-white/10 ${
-              idx === 0 ? 'text-slate-100' : 'text-slate-400'
-            }`}
-          >
-            {item.label}
-          </a>
-        ))}
-      </nav>
+    <header className="fixed top-0 w-full z-50 px-6 py-4">
+      <nav className="liquid-glass rounded-full px-6 py-3 flex items-center justify-between max-w-5xl mx-auto">
+        {/* ── Logo ── */}
+        <div className="flex items-center gap-2">
+          <Globe size={24} className="text-white" />
+          <span className="text-white font-semibold text-lg">Haris</span>
+        </div>
 
-      <div className="flex items-center gap-2">
-        <motion.button
-          whileTap={{ scale: 0.95 }}
-          onClick={() => onBegin('customPricing')}
-          className="liquid-glass px-4 py-2 rounded-full font-sans uppercase tracking-[0.05em] text-xs font-semibold text-slate-100/90 hover:text-slate-100 transition-colors"
-        >
-          Custom Pricing
-        </motion.button>
-        <motion.button
-          whileTap={{ scale: 0.95 }}
-          onClick={() => onBegin('portfolio')}
-          className="liquid-glass px-5 py-2 rounded-full font-sans uppercase tracking-[0.05em] text-xs font-semibold text-slate-100"
-        >
-          View My Work
-        </motion.button>
-      </div>
+        {/* ── Navigation links (desktop) ── */}
+        <div className="hidden md:flex items-center gap-8">
+          {([
+            { label: 'Portfolio', id: 'portfolio' },
+            { label: 'Pricing', id: 'customPricing' },
+            { label: 'Services', id: 'photoEdits' },
+            { label: 'About', id: 'about' },
+          ] as const).map((item) => (
+            <a
+              key={item.id}
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                onBegin(item.id as Tab);
+              }}
+              className="text-white/80 hover:text-white transition-colors text-sm font-medium"
+            >
+              {item.label}
+            </a>
+          ))}
+        </div>
+
+        {/* ── Right-side buttons ── */}
+        <div className="flex items-center gap-4">
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={() => onBegin('customPricing')}
+            className="text-white text-sm font-medium hover:text-white/80 transition-colors hidden sm:block"
+          >
+            Custom Pricing
+          </motion.button>
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={() => onBegin('portfolio')}
+            className="liquid-glass rounded-full px-6 py-2 text-white text-sm font-medium"
+          >
+            View Work
+          </motion.button>
+        </div>
+      </nav>
     </header>
   );
 }

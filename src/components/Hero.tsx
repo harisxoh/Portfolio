@@ -96,7 +96,7 @@ export default function Hero({ onBegin, onPricing }: HeroProps) {
       <section className="reel-intro">
         <motion.div className="reel-copy" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .65 }}>
           <div className="reel-badge"><Heart size={13} /> Independent editor & designer</div>
-          <h1>Thoughtful edits<br />that make you <em>look twice.</em></h1>
+          <h1>Making your ideas<br />look their best.</h1>
           <p>From natural photo edits to fresh design work, I help good ideas show up at their best.</p>
         </motion.div>
         <span className="reel-doodle-slashes" aria-hidden="true">//</span>

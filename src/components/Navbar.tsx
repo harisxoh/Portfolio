@@ -1,67 +1,32 @@
-import { Globe } from 'lucide-react';
-import { motion } from 'motion/react';
+import { ArrowUpRight, Leaf } from 'lucide-react';
 
-type Tab =
-  | 'portfolio'
-  | 'customPricing'
-  | 'photoEdits'
-  | 'moreEdits'
-  | 'designWork'
-  | 'about';
+export type Tab = 'portfolio' | 'customPricing' | 'photoEdits' | 'designWork' | 'about' | 'contact';
 
-interface NavbarProps {
-  onBegin: (tab: Tab) => void;
-}
+interface NavbarProps { activeTab: Tab; onBegin: (tab: Tab) => void }
 
-export default function Navbar({ onBegin }: NavbarProps) {
+const items: { label: string; id: Tab }[] = [
+  { label: 'Home', id: 'portfolio' },
+  { label: 'Photo edits', id: 'photoEdits' },
+  { label: 'Design', id: 'designWork' },
+  { label: 'Pricing', id: 'customPricing' },
+  { label: 'About', id: 'about' },
+];
+
+export default function Navbar({ activeTab, onBegin }: NavbarProps) {
   return (
-    <header className="fixed top-0 w-full z-50 px-6 py-4">
-      <nav className="liquid-glass rounded-full px-6 py-3 flex items-center justify-between max-w-5xl mx-auto">
-        {/* ── Logo ── */}
-        <div className="flex items-center gap-2">
-          <Globe size={24} className="text-white" />
-          <span className="text-white font-semibold text-lg">Haris</span>
-        </div>
-
-        {/* ── Navigation links (desktop) ── */}
-        <div className="hidden md:flex items-center gap-8">
-          {([
-            { label: 'Portfolio', id: 'portfolio' },
-            { label: 'Pricing', id: 'customPricing' },
-            { label: 'Services', id: 'photoEdits' },
-            { label: 'About', id: 'about' },
-          ] as const).map((item) => (
-            <a
-              key={item.id}
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                onBegin(item.id as Tab);
-              }}
-              className="text-white/80 hover:text-white transition-colors text-sm font-medium"
-            >
+    <header className="site-header">
+      <nav className="site-nav" aria-label="Main navigation">
+        <button className="brand" onClick={() => onBegin('portfolio')} aria-label="Haris home">
+          <span className="brand-mark"><Leaf size={20} /></span><span>Haris<span className="brand-dot">.</span></span>
+        </button>
+        <div className="nav-links">
+          {items.map((item) => (
+            <button key={item.id} onClick={() => onBegin(item.id)} className={activeTab === item.id ? 'nav-link active' : 'nav-link'}>
               {item.label}
-            </a>
+            </button>
           ))}
         </div>
-
-        {/* ── Right-side buttons ── */}
-        <div className="flex items-center gap-4">
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={() => onBegin('customPricing')}
-            className="text-white text-sm font-medium hover:text-white/80 transition-colors hidden sm:block"
-          >
-            Custom Pricing
-          </motion.button>
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={() => onBegin('portfolio')}
-            className="liquid-glass rounded-full px-6 py-2 text-white text-sm font-medium"
-          >
-            View Work
-          </motion.button>
-        </div>
+        <button className="contact-button" onClick={() => onBegin('contact')}>Let’s talk <ArrowUpRight size={15} /></button>
       </nav>
     </header>
   );

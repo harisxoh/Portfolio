@@ -1,6 +1,6 @@
-import { Compass, Camera, Sparkles, User, BadgeDollarSign } from 'lucide-react';
+import { Compass, Camera, User, BadgeDollarSign } from 'lucide-react';
 
-type Tab = 'portfolio' | 'customPricing' | 'photoEdits' | 'moreEdits' | 'designWork' | 'about';
+type Tab = 'portfolio' | 'customPricing' | 'photoEdits' | 'designWork' | 'about';
 
 interface BottomNavProps {
   activeTab: Tab;
@@ -12,7 +12,6 @@ export default function BottomNav({ activeTab, setActiveTab }: BottomNavProps) {
     { icon: Compass, label: 'Portfolio', id: 'portfolio' },
     { icon: BadgeDollarSign, label: 'Pricing', id: 'customPricing' },
     { icon: Camera, label: 'Photo Edits', id: 'photoEdits' },
-    { icon: Sparkles, label: 'More Edits', id: 'moreEdits' },
     { icon: Sparkles, label: 'Design Work', id: 'designWork' },
     { icon: User, label: 'About', id: 'about' },
   ];
